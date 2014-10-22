@@ -45,6 +45,7 @@ public class TorchSwitch extends BroadcastReceiver {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             boolean bright = intent.getBooleanExtra("bright", prefs.getBoolean("bright", false));
             boolean stop = intent.getBooleanExtra("stop", false);
+            boolean noNotification = intent.getBooleanExtra("flash_notification", false);
 
             Intent i = new Intent(context, TorchService.class);
             if (stop || torchServiceRunning(context)) {
@@ -54,6 +55,7 @@ public class TorchSwitch extends BroadcastReceiver {
                 context.stopService(i);
             } else {
                 i.putExtra("bright", bright);
+                i.putExtra("flash_notification", noNotification);
                 context.startService(i);
             }
         }

@@ -74,9 +74,10 @@ public class TorchService extends Service {
             mHandler.sendEmptyMessage(MSG_UPDATE_FLASH);
         }
 
-        startForeground(getString(R.string.app_name).hashCode(), getNotification());
+        if (intent.getBooleanExtra("flash_notification", false)) {
+            startForeground(getString(R.string.app_name).hashCode(), getNotification());
+        }
         updateState(true);
-
         return START_STICKY;
     }
 
