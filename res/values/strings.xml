@@ -17,9 +17,10 @@
      MA  02110-1301, USA.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Torch</string>
+    <string name="app_name">com.exodus.flash</string>
     <string name="about_title">About</string>
     <string name="about_close">Close</string>
+    <string name="wtf_dude">HEY DICKBAG, CHANGE THE PACKAGE NAME BACK TO COM.EXODUS.FLASH!</string>
 
     <string name="description">This program manipulates the camera LED.\n</string>
     <string name="warning">Warning: Leaving the LED on for a long time might overheat it.\n\nFull brightness \'always on\' has been tested running for \u00BD hr, but there is the risk this could damage the LED.\n</string>

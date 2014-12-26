@@ -21,24 +21,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/bg"
-        android:layout_width="@dimen/button_size"
-        android:layout_height="@dimen/button_size"
-        android:layout_gravity="center"
-        android:src="@drawable/bg_color" />
-    <ImageView
-        android:id="@+id/lightbulb"
-        android:layout_width="@dimen/lighbulb_size"
-        android:layout_height="@dimen/lighbulb_size"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_lightbulb" />
-    <ImageView
-        android:id="@+id/lightbulb_on"
-        android:layout_width="@dimen/lighbulb_size"
-        android:layout_height="@dimen/lighbulb_size"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_lightbulb_on"
-        android:alpha="0" />
-
 </FrameLayout>

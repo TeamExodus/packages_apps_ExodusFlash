@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2014 Exodus
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,9 +16,8 @@
  * MA  02110-1301, USA.
  */
 
-package net.cactii.flash2;
+package com.exodus.flash;
 
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -28,7 +27,7 @@ import android.os.Message;
 import android.util.Log;
 
 public class TorchService extends Service {
-    private static final String MSG_TAG = "TorchRoot";
+    private static final String MSG_TAG = "Exodus.FlashService";
 
     private int mFlashMode;
     private FlashDevice mFlashDevice;
@@ -56,7 +55,6 @@ public class TorchService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(MSG_TAG, "Starting torch");
 
         if (intent == null) {
             stopSelf();
@@ -74,9 +72,6 @@ public class TorchService extends Service {
             mHandler.sendEmptyMessage(MSG_UPDATE_FLASH);
         }
 
-        if (intent.getBooleanExtra("flash_notification", false)) {
-            startForeground(getString(R.string.app_name).hashCode(), getNotification());
-        }
         updateState(true);
         return START_STICKY;
     }
@@ -88,24 +83,6 @@ public class TorchService extends Service {
         FlashDevice.instance(this).setFlashMode(FlashDevice.OFF);
         updateState(false);
         super.onDestroy();
-    }
-
-    private Notification getNotification() {
-        PendingIntent contentIntent = PendingIntent.getActivity(this,
-                0, new Intent(this, MainActivity.class), 0);
-        PendingIntent turnOffIntent = PendingIntent.getBroadcast(this, 0,
-                new Intent(TorchSwitch.TOGGLE_FLASHLIGHT), 0);
-        Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentTitle(getString(R.string.not_torch_title))
-                .setContentIntent(contentIntent)
-                .setAutoCancel(false)
-                .setOnlyAlertOnce(true)
-                .setOngoing(true)
-                .addAction(R.drawable.ic_appwidget_torch_off_small,
-                        getString(R.string.not_torch_toggle), turnOffIntent)
-                .build();
-        return notification;
     }
 
     @Override

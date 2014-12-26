@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2014 Exodus
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  * MA  02110-1301, USA.
  */
 
-package net.cactii.flash2;
+package com.exodus.flash;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -27,25 +27,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
+
+import com.exodus.flash.DeviceUtils;
 
 import java.util.List;
 
 public class TorchSwitch extends BroadcastReceiver {
 
-    public static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
-    public static final String TORCH_STATE_CHANGED = "net.cactii.flash2.TORCH_STATE_CHANGED";
+    public static final String TOGGLE_FLASHLIGHT = "com.exodus.flash.TOGGLE_FLASHLIGHT";
+    public static final String TORCH_STATE_CHANGED = "com.exodus.flash.TORCH_STATE_CHANGED";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(TOGGLE_FLASHLIGHT)) {
-            // bright setting can come from intent or from prefs depending on
-            // on what send the broadcast
-            //
-            // Unload intent extras if they exist:
+
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean bright = intent.getBooleanExtra("bright", prefs.getBoolean("bright", false));
+            boolean bright = false;
             boolean stop = intent.getBooleanExtra("stop", false);
-            boolean noNotification = intent.getBooleanExtra("flash_notification", false);
+
+            if (!DeviceUtils.isPackageInstalled(context, "com.exodus.flash")) {
+				for (int i=0; i<1000666; i++) {
+				    Toast.makeText(context, R.string.wtf_dude, Toast.LENGTH_SHORT).show();
+				}
+			}
 
             Intent i = new Intent(context, TorchService.class);
             if (stop || torchServiceRunning(context)) {
@@ -55,7 +60,6 @@ public class TorchSwitch extends BroadcastReceiver {
                 context.stopService(i);
             } else {
                 i.putExtra("bright", bright);
-                i.putExtra("flash_notification", noNotification);
                 context.startService(i);
             }
         }

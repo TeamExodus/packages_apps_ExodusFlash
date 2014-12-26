@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2014 Exodus
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  * MA  02110-1301, USA.
  */
 
-package net.cactii.flash2;
+package com.exodus.flash;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,8 +46,6 @@ public class MainActivity extends Activity {
 
     private static final int ANIMATION_DURATION = 300;
 
-    private TorchWidgetProvider mWidgetProvider;
-
     private Context mContext;
 
     private boolean mBright;
@@ -59,9 +57,6 @@ public class MainActivity extends Activity {
     private boolean mHasBrightSetting = false;
 
     private float mFullScreenScale;
-
-    private ImageView mLightbulb, mLightbulbOn;
-    private ImageView mBackgroundShape;
 
     private final BroadcastReceiver mStateReceiver = new BroadcastReceiver() {
         @Override
@@ -78,36 +73,14 @@ public class MainActivity extends Activity {
     };
 
     private void onFlashOn() {
-        if (mBackgroundShape == null) {
-            return;
-        }
         if (mFullScreenScale <= 0.0f) {
             mFullScreenScale = getMeasureScale();
         }
         getActionBar().hide();
-        mBackgroundShape.animate()
-                .scaleX(mFullScreenScale)
-                .scaleY(mFullScreenScale)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
-                .setDuration(ANIMATION_DURATION);
-        mLightbulbOn.animate()
-                .alpha(1f)
-                .setDuration(ANIMATION_DURATION);
     }
 
     private void onFlashOff() {
-        if (mBackgroundShape == null) {
-            return;
-        }
         getActionBar().show();
-        mBackgroundShape.animate()
-                .scaleX(1)
-                .scaleY(1)
-                .setInterpolator(new OvershootInterpolator())
-                .setDuration(ANIMATION_DURATION);
-        mLightbulbOn.animate()
-                .alpha(0f)
-                .setDuration(ANIMATION_DURATION);
     }
 
     /** Called when the activity is first created. */
@@ -119,49 +92,21 @@ public class MainActivity extends Activity {
         getActionBar().show();
 
         setContentView(R.layout.main);
-
-        mBackgroundShape = (ImageView) findViewById(R.id.bg);
-        mLightbulb = (ImageView) findViewById(R.id.lightbulb);
-        mLightbulbOn = (ImageView) findViewById(R.id.lightbulb_on);
-
-        mTorchOn = false;
-
-        mWidgetProvider = TorchWidgetProvider.getInstance();
-
-        // Preferences
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mBright = mPrefs.getBoolean("bright", false);
-
-        mHasBrightSetting = getResources().getBoolean(R.bool.hasHighBrightness) &&
-                !getResources().getBoolean(R.bool.useCameraInterface);
-
-        mLightbulb.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TorchSwitch.TOGGLE_FLASHLIGHT);
-                intent.putExtra("bright", mBright);
-                intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-                sendBroadcast(intent);
-            }
-        });
     }
 
     @Override
     public void onPause() {
-        updateWidget();
         unregisterReceiver(mStateReceiver);
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        updateWidget();
         super.onDestroy();
     }
 
     @Override
     public void onResume() {
-        updateWidget();
         registerReceiver(mStateReceiver, new IntentFilter(TorchSwitch.TORCH_STATE_CHANGED));
         super.onResume();
     }
@@ -240,10 +185,6 @@ public class MainActivity extends Activity {
                     }
                 })
                 .show();
-    }
-
-    private void updateWidget() {
-        mWidgetProvider.updateAllStates(this);
     }
 
     private float getMeasureScale() {

@@ -24,7 +24,7 @@
     <bool name="useCameraInterface">false</bool>
 
     <!-- Full path to the sysfs toggle -->
-    <string name="flashDevice">/sys/class/leds/flashlight/brightness</string>
+    <string name="flashDevice">/sys/class/leds/led:flash_torch/brightness</string>
     <!-- Full path to the sysfs luminosity -->
     <string name="flashDeviceLuminosity"></string>
     <!-- Full path to the 2nd sysfs luminosity, leave empty if doesn't exist -->

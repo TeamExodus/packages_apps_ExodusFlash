@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 The CyanogenMod Project
+ * Copyright (C) 2014 Exodus
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  * MA  02110-1301, USA.
  */
 
-package net.cactii.flash2;
+package com.exodus.flash;
 
 import android.content.Context;
 import android.graphics.SurfaceTexture;
@@ -29,14 +29,14 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import net.cactii.flash2.R;
+import com.exodus.flash.R;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class FlashDevice {
 
-    private static final String MSG_TAG = "TorchDevice";
+    private static final String MSG_TAG = "Exodus.FlashDevice";
 
     /* New variables, init'ed by resource items */
     private static int mValueOff;
@@ -88,7 +88,7 @@ public class FlashDevice {
         mTorchService = ITorchService.Stub.asInterface(torchBinder);
 
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        this.mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Torch");
+        this.mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Flash");
     }
 
     public static synchronized FlashDevice instance(Context context) {
@@ -99,7 +99,6 @@ public class FlashDevice {
     }
 
     public synchronized void setFlashMode(int mode) {
-        Log.d(MSG_TAG, "setFlashMode " + mode);
 
         if (mFlashMode == mode) return;
 
